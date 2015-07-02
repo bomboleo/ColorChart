@@ -3,9 +3,9 @@ package com.bombo.colorchart;
 public class ColorUtils {
 	
 	public static float[] rgb2hsv(int r, int g, int b) {
-		float r2 = r/255;
-		float g2 = g/255;
-		float b2 = b/255;
+		float r2 = ((float)r)/255;
+		float g2 = ((float)g)/255;
+		float b2 = ((float)b)/255;
 		
 		float cMax = max(r2, g2, b2);
 		float cMin = min(r2, g2, b2);
