@@ -58,10 +58,61 @@ public class Color {
 	
 	public Color hueVariate(float d) {
 		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
-		
-		hsv[0] = (hsv[0]*d)%360;
-		
+		hsv[0] = (hsv[0]*(1+d))%360;
 		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
+	}
+	
+	public Color saturationVariate(float d) {
+		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
+		hsv[1] = hsv[1]*(1+d);
+		hsv[1] = Math.max(0, hsv[1]);
+		hsv[1] = Math.min(1, hsv[1]);
+		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
+	}
+	
+	public Color valueVariate(float d) {
+		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
+		hsv[2] = hsv[2]*(1+d);
+		hsv[2] = Math.max(0, hsv[2]);
+		hsv[2] = Math.min(1, hsv[2]);
+		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
+	}
+	
+	public Color lightVariate(float d) {
+		float[] hsl = ColorUtils.rgb2hsl(this.r, this.g, this.b);
+		hsl[2] = hsl[2]*(1+d);
+		hsl[2] = Math.max(0, hsl[2]);
+		hsl[2] = Math.min(1, hsl[2]);
+		return new Color(ColorUtils.hsl2rgb(hsl[0], hsl[1], hsl[2]));
+	}
+	
+	public Color getPastel(float saturation) {
+		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
+		hsv[2] = 0.8f;
+		hsv[1] = saturation;
+		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
+	}
+	
+	public Color mix(Color toMixWith) {
+		return new Color((r+toMixWith.getR())/2, (g+toMixWith.getG())/2, (b+toMixWith.getB())/2);
+	}
+	
+	public Color whiteMix() {
+		return new Color(255, 255, 255);
+	}
+	
+	public String toHexString() {
+		return ("#"+Integer.toHexString(r)+Integer.toHexString(g)+Integer.toHexString(b)).toUpperCase();
+	}
+	
+	public Color getOpposite() {
+		return new Color(256-r, 256-g, 256-b);
+	}
+	
+	public Color blackOrWhite() {
+		float[] hsl = ColorUtils.rgb2hsl(this.r, this.g, this.b);
+		if(hsl[2]<0.5) return new Color(255, 255, 255);
+		else return new Color(0, 0, 0);
 	}
 
 }
