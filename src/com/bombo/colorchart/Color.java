@@ -62,6 +62,14 @@ public class Color {
 		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
 	}
 	
+	public Color hueVariateAngle(float angle) {
+		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
+		hsv[0] = (hsv[0]+angle);
+		if(hsv[0] < 0) hsv[0] += 360;
+		hsv[0] = hsv[0]%360;
+		return new Color(ColorUtils.hsv2rgb(hsv[0], hsv[1], hsv[2]));
+	}
+	
 	public Color saturationVariate(float d) {
 		float[] hsv = ColorUtils.rgb2hsv(this.r, this.g, this.b);
 		hsv[1] = hsv[1]*(1+d);

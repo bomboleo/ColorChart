@@ -1,162 +1,184 @@
 package com.bombo.colorchart;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class ColorChart {
 
-	private Map<Color, List<Color>> hueVariationbase;
-	private Map<Color, List<Color>> lightVariationbase;
-	private Map<Color, List<Color>> saturationVariationbase;
-	private Map<Color, List<Color>> valueVariationbase;
-	private Map<Color, List<Color>> pastelBase;
-	private Map<Color, List<Color>> tintShadeBase;
-	private Map<Color, List<Color>> complementaryBase;
-	private Color[] baseColors;
+	private List<Color> analogous;
+	private List<Color> lightVariationbase;
+	private List<Color> saturationVariationbase;
+	private List<Color> valueVariationbase;
+	private List<Color> pastelBase;
+	private List<Color> tintShadeBase;
+	private Color complementary;
+	private Color[] triadic;
+	private Color[] tetradic;
+	private Color[] square;
+	private Color[] splitComplementary;
+	private Color baseColor;
 	private int variations;
 	private float delta;
-	
-	public ColorChart(int variations, float delta, Color... baseColors) {
+
+	public ColorChart(int variations, float delta, Color baseColor) {
 		this.variations = variations;
 		this.delta = delta;
-		this.baseColors = baseColors;
-		this.hueVariationbase = new HashMap<Color, List<Color>>();
-		this.lightVariationbase = new HashMap<Color, List<Color>>();
-		this.saturationVariationbase = new HashMap<Color, List<Color>>();
-		this.valueVariationbase = new HashMap<Color, List<Color>>();
-		this.pastelBase = new HashMap<Color, List<Color>>();
-		this.tintShadeBase = new HashMap<Color, List<Color>>();
-		this.complementaryBase = new HashMap<Color, List<Color>>();
-		generateHueVariations();
+		this.baseColor = baseColor;
+		this.analogous = new ArrayList<Color>();
+		this.lightVariationbase = new ArrayList<Color>();
+		this.saturationVariationbase = new ArrayList<Color>();
+		this.valueVariationbase = new ArrayList<Color>();
+		this.pastelBase = new ArrayList<Color>();
+		this.tintShadeBase = new ArrayList<Color>();
+		this.triadic = new Color[3];
+		this.tetradic = new Color[4];
+		this.square = new Color[4];
+		this.splitComplementary = new Color[3];
+		generateAnalogous();
 		generateLightVariations();
 		generateSaturationVariations();
 		generateValueVariations();
 		generatePastelBase();
 		generateTintShade();
 		generateComplementary();
+		generateTriadic();
+		generateSplitComplementary();
+		generateTetradic();
+		generateSquare();
 	}
-	
-	private void generateHueVariations() {
+
+	private void generateAnalogous() {
 		int s = -Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.hueVariate(i*delta));
-			}
-			hueVariationbase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			analogous.add(baseColor.hueVariateAngle(i*60/variations));
 		}
 	}
-	
+
 	private void generateLightVariations() {
 		int s = -Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.lightVariate(i*delta));
-			}
-			lightVariationbase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			lightVariationbase.add(baseColor.lightVariate(i * delta));
 		}
 	}
-	
+
 	private void generateSaturationVariations() {
 		int s = -Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.saturationVariate(i*delta));
-			}
-			saturationVariationbase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			saturationVariationbase.add(baseColor.saturationVariate(i * delta));
 		}
 	}
-	
+
 	private void generateValueVariations() {
 		int s = -Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.valueVariate(i*delta));
-			}
-			valueVariationbase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			valueVariationbase.add(baseColor.valueVariate(i * delta));
 		}
 	}
-	
+
 	private void generatePastelBase() {
 		int s = -Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.getPastel(0.2f+i*(0.3f/this.variations)));
-			}
-			pastelBase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			pastelBase.add(baseColor.getPastel(0.2f + i * (0.3f / this.variations)));
 		}
 	}
-	
+
 	private void generateTintShade() {
 		int s = Math.floorDiv(variations, 2);
-		int e = s + variations +1;
-		for(Color color : baseColors) {
-			List<Color> variations = new ArrayList<>();
-			for(int i = s; i < e; i++) {
-				variations.add(color.mix(new Color((256/this.variations)*(i-s), (256/this.variations)*(i-s), (256/this.variations)*(i-s))));
-			}
-			tintShadeBase.put(color, variations);
+		int e = s + variations + 1;
+		for (int i = s; i < e; i++) {
+			tintShadeBase.add(baseColor.mix(new Color((256 / this.variations) * (i - s), (256 / this.variations) * (i - s),
+					(256 / this.variations) * (i - s))));
 		}
 	}
 	
+	private void generateTriadic() {
+		triadic[0] = baseColor.hueVariateAngle(-120);
+		triadic[1] = baseColor;
+		triadic[2] = baseColor.hueVariateAngle(120);
+	}
+
 	private void generateComplementary() {
-		for(Color color : baseColors) {
-			int r = color.getR();
-			int g = color.getG();
-			int b = color.getB();
-			int c1 = (255-r)/this.variations;
-			int c2 = (255-g)/this.variations;
-			int c3= (255-b)/this.variations;
-			List<Color> cBase = new ArrayList<>();
-			for(int i = 1; i <= this.variations; i++) {
-				cBase.add(new Color(c1, c2, c3));
-			}
-			complementaryBase.put(color, cBase);
-		}
+		complementary = baseColor.hueVariateAngle(180);
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getHueVariations() {
-		return hueVariationbase.entrySet();
+	private void generateSplitComplementary() {
+		splitComplementary[0] = baseColor.hueVariateAngle(-150);
+		splitComplementary[1] = baseColor;
+		splitComplementary[2] = baseColor.hueVariateAngle(150);
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getLightVariations() {
-		return lightVariationbase.entrySet();
+	private void generateTetradic() {
+		tetradic[0] = baseColor;
+		tetradic[1] = baseColor.hueVariateAngle(60);
+		tetradic[2] = baseColor.hueVariateAngle(180);
+		tetradic[3] = tetradic[2].hueVariateAngle(60);
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getSaturationVariations() {
-		return saturationVariationbase.entrySet();
+	private void generateSquare() {
+		square[0] = baseColor;
+		square[1] = baseColor.hueVariateAngle(90);
+		square[2] = baseColor.hueVariateAngle(180);
+		square[3] = baseColor.hueVariateAngle(270);
+	}
+
+	public List<Color> getAnalogous() {
+		return analogous;
+	}
+
+	public List<Color> getLightVariationbase() {
+		return lightVariationbase;
+	}
+
+	public List<Color> getSaturationVariationbase() {
+		return saturationVariationbase;
+	}
+
+	public List<Color> getValueVariationbase() {
+		return valueVariationbase;
+	}
+
+	public List<Color> getPastelBase() {
+		return pastelBase;
+	}
+
+	public List<Color> getTintShadeBase() {
+		return tintShadeBase;
+	}
+
+	public Color getComplementary() {
+		return complementary;
+	}
+
+	public Color getBaseColor() {
+		return baseColor;
+	}
+
+	public int getVariations() {
+		return variations;
+	}
+
+	public float getDelta() {
+		return delta;
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getValueVariations() {
-		return valueVariationbase.entrySet();
+	public Color[] getTriadic() {
+		return triadic;
+	}
+	public Color[] getTetradic() {
+		return tetradic;
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getPastelBase() {
-		return pastelBase.entrySet();
+	public Color[] getSplitComplementary() {
+		return splitComplementary;
 	}
 	
-	public Set<Map.Entry<Color, List<Color>>> getTintShadeBase() {
-		return tintShadeBase.entrySet();
-	}
-	
-	public Set<Map.Entry<Color, List<Color>>> getComplementaryBase() {
-		return complementaryBase.entrySet();
-	}
-	
-	public Color[] getBaseColor() {
-		return baseColors;
+	public Color[] getSquare() {
+		return square;
 	}
 
 }
