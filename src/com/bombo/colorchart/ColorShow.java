@@ -21,12 +21,12 @@ public class ColorShow extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Drawing Operations Test");
 		Group root = new Group();
-		int canvaWidth = 920;
+		int canvaWidth = 975;
 		Canvas canvas = new Canvas(canvaWidth, canvaWidth);
 		
 		Color green = new Color("318CE7");
 		
-		ColorChart chart = new ColorChart(5, 0.1f, green);
+		ColorChart chart = new ColorChart(6, 0.1f, green);
 
 		gc = canvas.getGraphicsContext2D();
 
@@ -100,6 +100,21 @@ public class ColorShow extends Application {
 		for(Color color : chart.getTriadic()) {
 			drawColor(color, 490, 60*y, 50, 50, false);
 			ColorChart cc = new ColorChart(5, 0.1f, color);
+			int x = 8;
+			for(Color subColor : cc.getTintShadeBase()) {
+				drawColor(subColor, 60*x+70, 60*y, 50, 50, false);
+				x++;
+			}
+			y++;
+		}
+		
+		gc.setFill(javafx.scene.paint.Color.WHITE);
+		gc.fillText("Analogous scheme", 490, y*60+40);
+		y++;
+		
+		for(Color color : chart.getAnalogous()) {
+			drawColor(color, 490, 60*y, 50, 50, false);
+			ColorChart cc = new ColorChart(6, 0.1f, color);
 			int x = 8;
 			for(Color subColor : cc.getTintShadeBase()) {
 				drawColor(subColor, 60*x+70, 60*y, 50, 50, false);
