@@ -24,7 +24,7 @@ public class ColorShow extends Application {
 		int canvaWidth = 975;
 		Canvas canvas = new Canvas(canvaWidth, canvaWidth);
 		
-		Color green = new Color("318CE7");
+		Color green = new Color("336699");
 		
 		ColorChart chart = new ColorChart(6, 0.1f, green);
 
